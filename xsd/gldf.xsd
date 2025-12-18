@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0.0-rc.3">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0.0-rc.4">
 	<xs:element name="Root">
 		<xs:annotation>
 			<xs:documentation>Root element for a configurable product</xs:documentation>
@@ -446,6 +446,30 @@
 									</xs:element>
 								</xs:sequence>
 							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TakeBackProgram" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Manufacturer take-back program information for EU Digital Product Passport (DPP)</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Available" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>Whether a take-back program is available</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ProgramURL" type="xs:anyURI" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>URL to the take-back program information</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Description" type="Locale" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Description of the take-back program, translatable</xs:documentation>
+							</xs:annotation>
 						</xs:element>
 					</xs:sequence>
 				</xs:complexType>
@@ -3781,6 +3805,17 @@ Note: These types are used in IES photometry files</xs:documentation>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
+			<!-- EU Digital Product Passport (DPP) - Global Product Compliance -->
+			<xs:element name="Compliance" type="Compliance" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Global regulatory compliance information (RoHS, REACH, CE). Can be overridden per Variant.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Repairability" type="Repairability" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Global repairability information for EU DPP</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="DescriptiveAttributes" type="DescriptiveAttributes" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Global product attributes applicable to all variants of the product</xs:documentation>
@@ -4396,6 +4431,73 @@ Note: These types are used in IES photometry files</xs:documentation>
 									</xs:annotation>
 								</xs:attribute>
 							</xs:complexType>
+						</xs:element>
+						<!-- EU Digital Product Passport (DPP) - Variant-specific sustainability data -->
+						<xs:element name="DigitalProductPassport" type="DigitalProductPassport" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>EU Digital Product Passport identification and data carrier</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CarbonFootprint" type="CarbonFootprint" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Carbon footprint and environmental impact data</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="WaterConsumption" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Manufacturing water consumption in liters</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:double">
+									<xs:minInclusive value="0"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="MaterialComposition" type="MaterialComposition" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Material composition and recycled content</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Circularity" type="Circularity" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>End-of-life and circularity information</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Durability" type="Durability" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Lifespan and warranty information</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Repairability" type="Repairability" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Repairability score and spare parts (overrides ProductMetaData)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Compliance" type="Compliance" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Regulatory compliance - RoHS, REACH, CE, hazardous substances (overrides ProductMetaData)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Traceability" type="Traceability" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Manufacturing traceability information</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="LuminaireEnergyLabel" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>EU Energy Label for the complete luminaire (A-G scale)</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="A"/>
+									<xs:enumeration value="B"/>
+									<xs:enumeration value="C"/>
+									<xs:enumeration value="D"/>
+									<xs:enumeration value="E"/>
+									<xs:enumeration value="F"/>
+									<xs:enumeration value="G"/>
+								</xs:restriction>
+							</xs:simpleType>
 						</xs:element>
 						<xs:element name="DescriptiveAttributes" type="DescriptiveAttributes" minOccurs="0">
 							<xs:annotation>
@@ -5820,6 +5922,526 @@ Recommend fixed time values are 35k, 50k, 75k or 100k hours (depending on applic
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
+	<!-- ============================================== -->
+	<!-- EU Digital Product Passport (DPP) Complex Types -->
+	<!-- ============================================== -->
+	<xs:complexType name="DigitalProductPassport">
+		<xs:annotation>
+			<xs:documentation>EU Digital Product Passport identification and data carrier information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DPPUniqueIdentifier" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Unique identifier for EU DPP registry (required from 2026)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DataCarrierURI" type="xs:anyURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>URI for QR code/data carrier linking to DPP data</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DataCarrierType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Type of data carrier used on the product</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="QRCode"/>
+						<xs:enumeration value="DataMatrix"/>
+						<xs:enumeration value="RFID"/>
+						<xs:enumeration value="NFC"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CarbonFootprint">
+		<xs:annotation>
+			<xs:documentation>Carbon footprint data according to ISO 14067 / PEF methodology</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TotalCO2e" type="xs:double">
+				<xs:annotation>
+					<xs:documentation>Total carbon footprint in kg CO2 equivalent</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CalculationMethod" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Methodology used for carbon footprint calculation</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="ISO14067"/>
+						<xs:enumeration value="PEF"/>
+						<xs:enumeration value="GHGProtocol"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ByPhase" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Carbon footprint breakdown by lifecycle phase</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="RawMaterials" type="xs:double" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>kg CO2e from raw material extraction</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Manufacturing" type="xs:double" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>kg CO2e from manufacturing process</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Transport" type="xs:double" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>kg CO2e from transportation</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Use" type="xs:double" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>kg CO2e from use phase (lifetime energy)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="EndOfLife" type="xs:double" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>kg CO2e from end-of-life processing</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="EPDReference" type="xs:anyURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Link to Environmental Product Declaration (EPD)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EPDNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>EPD registration number</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="functionalUnit" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Functional unit for calculation (e.g., "per luminaire", "per 1000 lm for 50000h")</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="MaterialComposition">
+		<xs:annotation>
+			<xs:documentation>Material composition of the luminaire for circularity assessment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TotalWeight">
+				<xs:annotation>
+					<xs:documentation>Total weight of the luminaire in grams</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Materials" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>List of materials in the product</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Material" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Name" type="xs:string">
+										<xs:annotation>
+											<xs:documentation>Material name (e.g., "Aluminum", "ABS Plastic")</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="Category">
+										<xs:annotation>
+											<xs:documentation>Material category for recycling classification</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="Metal"/>
+												<xs:enumeration value="Plastic"/>
+												<xs:enumeration value="Glass"/>
+												<xs:enumeration value="Electronics"/>
+												<xs:enumeration value="Ceramic"/>
+												<xs:enumeration value="Composite"/>
+												<xs:enumeration value="Other"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="Weight">
+										<xs:annotation>
+											<xs:documentation>Weight in grams</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="Percentage" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Percentage of total weight (0-100)</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0"/>
+												<xs:maxInclusive value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="RecycledContent" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Percentage of recycled content in this material (0-100)</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0"/>
+												<xs:maxInclusive value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="Recyclable" type="xs:boolean" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Whether this material is recyclable</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RecycledContentTotal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Total percentage of recycled materials (0-100)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minInclusive value="0"/>
+						<xs:maxInclusive value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RecyclabilityTotal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Total percentage of recyclable materials (0-100)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minInclusive value="0"/>
+						<xs:maxInclusive value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Circularity">
+		<xs:annotation>
+			<xs:documentation>End-of-life and circularity information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="DisassemblyTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Time required to disassemble the luminaire in minutes</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="DisassemblyInstructions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Reference to disassembly instructions file</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="fileId" type="xs:NCName" use="required">
+						<xs:annotation>
+							<xs:documentation>Id reference to a document File element defined under GeneralDefinitions/Files</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RecyclingInstructions" type="Locale" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Per-component recycling guidance, translatable</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="WasteCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>European Waste Catalogue (EWC) code</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Durability">
+		<xs:annotation>
+			<xs:documentation>Product lifespan and warranty information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ExpectedLifespanYears" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Expected lifespan of the luminaire in years (not just LED hours)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="WarrantyYears" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Product warranty period in years</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="WarrantyTerms" type="Locale" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Warranty terms description, translatable</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Repairability">
+		<xs:annotation>
+			<xs:documentation>Repairability and spare parts information per EU requirements</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RepairabilityScore" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>EU Repairability Index score (1-10 scale)</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="10"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="RepairInstructions" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Reference to repair instructions file</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="fileId" type="xs:NCName" use="required">
+						<xs:annotation>
+							<xs:documentation>Id reference to a document File element defined under GeneralDefinitions/Files</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SparePartsAvailabilityYears" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Guaranteed years of spare parts availability after end of production</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minInclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SpareParts" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>List of available spare parts</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SparePart" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Name" type="Locale">
+										<xs:annotation>
+											<xs:documentation>Spare part name, translatable</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="PartNumber" type="xs:string" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Manufacturer part number</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="GTIN" type="GTIN" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Global Trade Item Number for the spare part</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="AvailabilityYears" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Years this part will remain available</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:int">
+												<xs:minInclusive value="0"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Compliance">
+		<xs:annotation>
+			<xs:documentation>Regulatory compliance declarations</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RoHSCompliance" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>RoHS Directive 2011/65/EU compliance</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Compliant" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>Whether the product is RoHS compliant</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DeclarationReference" type="xs:anyURI" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>URL to RoHS declaration document</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Exemptions" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>List of applicable RoHS exemptions (comma-separated)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="REACHCompliance" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>REACH Regulation (EC) No 1907/2006 compliance</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Compliant" type="xs:boolean">
+							<xs:annotation>
+								<xs:documentation>Whether the product is REACH compliant</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="SCIPNumber" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>SCIP database notification number</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="DeclarationReference" type="xs:anyURI" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>URL to REACH declaration document</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CEDeclaration" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Reference to CE Declaration of Conformity file</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="fileId" type="xs:NCName" use="required">
+						<xs:annotation>
+							<xs:documentation>Id reference to a document File element defined under GeneralDefinitions/Files</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="HazardousSubstances" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>List of hazardous substances (SVHC) in the product</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Substance" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Name" type="xs:string">
+										<xs:annotation>
+											<xs:documentation>Substance name</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="CASNumber" type="xs:string" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>CAS Registry Number</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="ECNumber" type="xs:string" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>EC (EINECS/ELINCS) Number</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="Concentration">
+										<xs:annotation>
+											<xs:documentation>Concentration in weight percent (0-100)</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:double">
+												<xs:minInclusive value="0"/>
+												<xs:maxInclusive value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="Location" type="xs:string" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Location in the product (e.g., "LED driver", "housing")</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="SVHCListed" type="xs:boolean" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Whether substance is on SVHC candidate list</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Traceability">
+		<xs:annotation>
+			<xs:documentation>Manufacturing traceability information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CountryOfManufacture" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ISO 3166-1 alpha-2 country code</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[A-Z]{2}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ManufacturingPlant" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Factory/plant identifier</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ManufacturingDate" type="xs:date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Production date</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BatchNumber" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Production batch identifier</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- End of DPP Complex Types -->
 	<xs:simpleType name="GTIN">
 		<xs:annotation>
 			<xs:documentation>Definition of the Global Trade Item Number (GTIN)</xs:documentation>
