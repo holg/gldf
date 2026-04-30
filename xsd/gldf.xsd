@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0.0-rc.3">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0.0-rc.4">
 	<xs:element name="Root">
 		<xs:annotation>
 			<xs:documentation>Root element for a configurable product</xs:documentation>
@@ -692,7 +692,7 @@
 		<xs:sequence>
 			<xs:element name="Photometry" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>Single photometry. Reference to an Eulumdat or IES File element, with additional descriptive informations</xs:documentation>
+					<xs:documentation>Single photometry. Reference to an Eulumdat or IES File element, with additional descriptive information</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
@@ -1011,7 +1011,7 @@ Note: These types are used in IES photometry files</xs:documentation>
 						</xs:element>
 						<xs:element name="EnergyLabels" type="EnergyLabels" minOccurs="0">
 							<xs:annotation>
-								<xs:documentation>European Union energy label, accoring to the energy consumption labelling scheme. Possible values are e.g. "A+" or "D"</xs:documentation>
+								<xs:documentation>European Union energy label, according to the energy consumption labelling scheme. Possible values are e.g. "A+" or "D"</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="SpectrumReference" minOccurs="0">
@@ -1213,37 +1213,73 @@ Note: These types are used in IES photometry files</xs:documentation>
 											</xs:restriction>
 										</xs:simpleType>
 									</xs:element>
-									<xs:element name="RatedChromacityCoordinateValues" minOccurs="0">
-										<xs:annotation>
-											<xs:documentation>Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
-										</xs:annotation>
-										<xs:complexType>
-											<xs:sequence>
-												<xs:element name="X">
-													<xs:annotation>
-														<xs:documentation>Chromaticity X coordinate</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:double">
-															<xs:minInclusive value="0"/>
-															<xs:maxInclusive value="1"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element name="Y">
-													<xs:annotation>
-														<xs:documentation>Chromaticity Y coordinate</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:double">
-															<xs:minInclusive value="0"/>
-															<xs:maxInclusive value="1"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-											</xs:sequence>
-										</xs:complexType>
-									</xs:element>
+									<xs:choice minOccurs="0">
+										<xs:element name="RatedChromaticityCoordinateValues">
+											<xs:annotation>
+												<xs:documentation>Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="X">
+														<xs:annotation>
+															<xs:documentation>Chromaticity X coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Y">
+														<xs:annotation>
+															<xs:documentation>Chromaticity Y coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="RatedChromacityCoordinateValues">
+											<xs:annotation>
+												<xs:appinfo>
+													<deprecated since="1.0.0-rc.4" removeIn="2.0.0" replacement="RatedChromaticityCoordinateValues"/>
+												</xs:appinfo>
+												<xs:documentation>DEPRECATED (since 1.0.0-rc.4): misspelled element name retained for backwards compatibility with rc.3 files. Use RatedChromaticityCoordinateValues instead. Will be removed in GLDF 2.0.0. Original description: Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="X">
+														<xs:annotation>
+															<xs:documentation>Chromaticity X coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Y">
+														<xs:annotation>
+															<xs:documentation>Chromaticity Y coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
 									<xs:element name="TLCI" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>Television Lighting Consistency Index (TLCI) . Evaluate the spectral power distribution of luminaires for television purposes. The higher the result the better the color rendering quality. Ranges from 0 to 100. See also EN 12193:2018</xs:documentation>
@@ -1365,8 +1401,24 @@ Note: These types are used in IES photometry files</xs:documentation>
 											<xs:restriction base="xs:string">
 												<xs:enumeration value="Incandescent"/>
 												<xs:enumeration value="Halogen"/>
-												<xs:enumeration value="Flourescent Triphosphor"/>
-												<xs:enumeration value="Flourescent Halophosphate"/>
+												<xs:enumeration value="Fluorescent Triphosphor"/>
+												<xs:enumeration value="Fluorescent Halophosphate"/>
+												<xs:enumeration value="Flourescent Triphosphor">
+													<xs:annotation>
+														<xs:appinfo>
+															<deprecated since="1.0.0-rc.4" removeIn="2.0.0" replacement="Fluorescent Triphosphor"/>
+														</xs:appinfo>
+														<xs:documentation>DEPRECATED (since 1.0.0-rc.4): misspelled value retained for backwards compatibility with rc.3 files. Use "Fluorescent Triphosphor" instead. Will be removed in GLDF 2.0.0.</xs:documentation>
+													</xs:annotation>
+												</xs:enumeration>
+												<xs:enumeration value="Flourescent Halophosphate">
+													<xs:annotation>
+														<xs:appinfo>
+															<deprecated since="1.0.0-rc.4" removeIn="2.0.0" replacement="Fluorescent Halophosphate"/>
+														</xs:appinfo>
+														<xs:documentation>DEPRECATED (since 1.0.0-rc.4): misspelled value retained for backwards compatibility with rc.3 files. Use "Fluorescent Halophosphate" instead. Will be removed in GLDF 2.0.0.</xs:documentation>
+													</xs:annotation>
+												</xs:enumeration>
 												<xs:enumeration value="Compact Fluorescent"/>
 												<xs:enumeration value="Mercury"/>
 												<xs:enumeration value="Metal Halide (250/400W)"/>
@@ -1548,7 +1600,7 @@ Note: These types are used in IES photometry files</xs:documentation>
 						</xs:element>
 						<xs:element name="EnergyLabels" type="EnergyLabels" minOccurs="0">
 							<xs:annotation>
-								<xs:documentation>European Union energy label, accoring to the energy consumption labelling scheme. Possible values are e.g. "A+" or "D"</xs:documentation>
+								<xs:documentation>European Union energy label, according to the energy consumption labelling scheme. Possible values are e.g. "A+" or "D"</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="SpectrumReference" minOccurs="0">
@@ -1750,37 +1802,73 @@ Note: These types are used in IES photometry files</xs:documentation>
 											</xs:restriction>
 										</xs:simpleType>
 									</xs:element>
-									<xs:element name="RatedChromacityCoordinateValues" minOccurs="0">
-										<xs:annotation>
-											<xs:documentation>Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
-										</xs:annotation>
-										<xs:complexType>
-											<xs:sequence>
-												<xs:element name="X">
-													<xs:annotation>
-														<xs:documentation>Chromaticity X coordinate</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:double">
-															<xs:minInclusive value="0"/>
-															<xs:maxInclusive value="1"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element name="Y">
-													<xs:annotation>
-														<xs:documentation>Chromaticity Y coordinate</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:double">
-															<xs:minInclusive value="0"/>
-															<xs:maxInclusive value="1"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-											</xs:sequence>
-										</xs:complexType>
-									</xs:element>
+									<xs:choice minOccurs="0">
+										<xs:element name="RatedChromaticityCoordinateValues">
+											<xs:annotation>
+												<xs:documentation>Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="X">
+														<xs:annotation>
+															<xs:documentation>Chromaticity X coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Y">
+														<xs:annotation>
+															<xs:documentation>Chromaticity Y coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="RatedChromacityCoordinateValues">
+											<xs:annotation>
+												<xs:appinfo>
+													<deprecated since="1.0.0-rc.4" removeIn="2.0.0" replacement="RatedChromaticityCoordinateValues"/>
+												</xs:appinfo>
+												<xs:documentation>DEPRECATED (since 1.0.0-rc.4): misspelled element name retained for backwards compatibility with rc.3 files. Use RatedChromaticityCoordinateValues instead. Will be removed in GLDF 2.0.0. Original description: Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="X">
+														<xs:annotation>
+															<xs:documentation>Chromaticity X coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Y">
+														<xs:annotation>
+															<xs:documentation>Chromaticity Y coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
 									<xs:element name="TLCI" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>Television Lighting Consistency Index (TLCI) . Evaluate the spectral power distribution of luminaires for television purposes. The higher the result the better the color rendering quality. Ranges from 0 to 100. See also EN 12193:2018</xs:documentation>
@@ -2025,7 +2113,7 @@ Note: These types are used in IES photometry files</xs:documentation>
 						</xs:element>
 						<xs:element name="EnergyLabels" type="EnergyLabels" minOccurs="0">
 							<xs:annotation>
-								<xs:documentation>European Union energy label, accoring to the energy consumption labelling scheme. Possible values are e.g. "A+" or "D"</xs:documentation>
+								<xs:documentation>European Union energy label, according to the energy consumption labelling scheme. Possible values are e.g. "A+" or "D"</xs:documentation>
 							</xs:annotation>
 						</xs:element>
 						<xs:element name="ActivePowerTable" minOccurs="0">
@@ -2215,37 +2303,73 @@ Note: These types are used in IES photometry files</xs:documentation>
 											</xs:restriction>
 										</xs:simpleType>
 									</xs:element>
-									<xs:element name="RatedChromacityCoordinateValues" minOccurs="0">
-										<xs:annotation>
-											<xs:documentation>Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
-										</xs:annotation>
-										<xs:complexType>
-											<xs:sequence>
-												<xs:element name="X">
-													<xs:annotation>
-														<xs:documentation>Chromaticity X coordinate</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:double">
-															<xs:minInclusive value="0"/>
-															<xs:maxInclusive value="1"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-												<xs:element name="Y">
-													<xs:annotation>
-														<xs:documentation>Chromaticity Y coordinate</xs:documentation>
-													</xs:annotation>
-													<xs:simpleType>
-														<xs:restriction base="xs:double">
-															<xs:minInclusive value="0"/>
-															<xs:maxInclusive value="1"/>
-														</xs:restriction>
-													</xs:simpleType>
-												</xs:element>
-											</xs:sequence>
-										</xs:complexType>
-									</xs:element>
+									<xs:choice minOccurs="0">
+										<xs:element name="RatedChromaticityCoordinateValues">
+											<xs:annotation>
+												<xs:documentation>Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="X">
+														<xs:annotation>
+															<xs:documentation>Chromaticity X coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Y">
+														<xs:annotation>
+															<xs:documentation>Chromaticity Y coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="RatedChromacityCoordinateValues">
+											<xs:annotation>
+												<xs:appinfo>
+													<deprecated since="1.0.0-rc.4" removeIn="2.0.0" replacement="RatedChromaticityCoordinateValues"/>
+												</xs:appinfo>
+												<xs:documentation>DEPRECATED (since 1.0.0-rc.4): misspelled element name retained for backwards compatibility with rc.3 files. Use RatedChromaticityCoordinateValues instead. Will be removed in GLDF 2.0.0. Original description: Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="X">
+														<xs:annotation>
+															<xs:documentation>Chromaticity X coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Y">
+														<xs:annotation>
+															<xs:documentation>Chromaticity Y coordinate</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:double">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:choice>
 									<xs:element name="TLCI" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>Television Lighting Consistency Index (TLCI) . Evaluate the spectral power distribution of luminaires for television purposes. The higher the result the better the color rendering quality. Ranges from 0 to 100. See also EN 12193:2018</xs:documentation>
@@ -2487,37 +2611,73 @@ Note: These types are used in IES photometry files</xs:documentation>
 																	</xs:restriction>
 																</xs:simpleType>
 															</xs:element>
-															<xs:element name="RatedChromacityCoordinateValues" minOccurs="0">
-																<xs:annotation>
-																	<xs:documentation>Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
-																</xs:annotation>
-																<xs:complexType>
-																	<xs:sequence>
-																		<xs:element name="X">
-																			<xs:annotation>
-																				<xs:documentation>Chromaticity X coordinate</xs:documentation>
-																			</xs:annotation>
-																			<xs:simpleType>
-																				<xs:restriction base="xs:double">
-																					<xs:minInclusive value="0"/>
-																					<xs:maxInclusive value="1"/>
-																				</xs:restriction>
-																			</xs:simpleType>
-																		</xs:element>
-																		<xs:element name="Y">
-																			<xs:annotation>
-																				<xs:documentation>Chromaticity Y coordinate</xs:documentation>
-																			</xs:annotation>
-																			<xs:simpleType>
-																				<xs:restriction base="xs:double">
-																					<xs:minInclusive value="0"/>
-																					<xs:maxInclusive value="1"/>
-																				</xs:restriction>
-																			</xs:simpleType>
-																		</xs:element>
-																	</xs:sequence>
-																</xs:complexType>
-															</xs:element>
+															<xs:choice minOccurs="0">
+																<xs:element name="RatedChromaticityCoordinateValues">
+																	<xs:annotation>
+																		<xs:documentation>Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="X">
+																				<xs:annotation>
+																					<xs:documentation>Chromaticity X coordinate</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:double">
+																						<xs:minInclusive value="0"/>
+																						<xs:maxInclusive value="1"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="Y">
+																				<xs:annotation>
+																					<xs:documentation>Chromaticity Y coordinate</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:double">
+																						<xs:minInclusive value="0"/>
+																						<xs:maxInclusive value="1"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="RatedChromacityCoordinateValues">
+																	<xs:annotation>
+																		<xs:appinfo>
+																			<deprecated since="1.0.0-rc.4" removeIn="2.0.0" replacement="RatedChromaticityCoordinateValues"/>
+																		</xs:appinfo>
+																		<xs:documentation>DEPRECATED (since 1.0.0-rc.4): misspelled element name retained for backwards compatibility with rc.3 files. Use RatedChromaticityCoordinateValues instead. Will be removed in GLDF 2.0.0. Original description: Chromaticity coordinates ratio of a set of 3 tristimulus values to their sum according ISO 11664-1:2007. As the sum of the 3 chromaticity coordinates is equal to 1, two of them are sufficient to define a chromaticity</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="X">
+																				<xs:annotation>
+																					<xs:documentation>Chromaticity X coordinate</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:double">
+																						<xs:minInclusive value="0"/>
+																						<xs:maxInclusive value="1"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																			<xs:element name="Y">
+																				<xs:annotation>
+																					<xs:documentation>Chromaticity Y coordinate</xs:documentation>
+																				</xs:annotation>
+																				<xs:simpleType>
+																					<xs:restriction base="xs:double">
+																						<xs:minInclusive value="0"/>
+																						<xs:maxInclusive value="1"/>
+																					</xs:restriction>
+																				</xs:simpleType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:choice>
 															<xs:element name="TLCI" minOccurs="0">
 																<xs:annotation>
 																	<xs:documentation>Television Lighting Consistency Index (TLCI) . Evaluate the spectral power distribution of luminaires for television purposes. The higher the result the better the color rendering quality. Ranges from 0 to 100. See also EN 12193:2018</xs:documentation>
@@ -2797,7 +2957,7 @@ Note: These types are used in IES photometry files</xs:documentation>
 					</xs:sequence>
 					<xs:attribute name="id" type="xs:ID" use="required">
 						<xs:annotation>
-							<xs:documentation>Unique identiofier of the control gear</xs:documentation>
+							<xs:documentation>Unique identifier of the control gear</xs:documentation>
 						</xs:annotation>
 					</xs:attribute>
 				</xs:complexType>
@@ -5732,7 +5892,7 @@ Recommend fixed time values are 35k, 50k, 75k or 100k hours (depending on applic
 	</xs:complexType>
 	<xs:complexType name="TemperatureRange">
 		<xs:annotation>
-			<xs:documentation>Definition of a remperature range, with an inclusive highest and lowest temparature value. Can be defined in Celsius or Kelvin</xs:documentation>
+			<xs:documentation>Definition of a temperature range, with an inclusive highest and lowest temperature value. Can be defined in Celsius or Kelvin</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="Lower" type="xs:int">
