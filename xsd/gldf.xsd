@@ -1181,37 +1181,15 @@ Note: These types are used in IES photometry files</xs:documentation>
 											</xs:sequence>
 										</xs:complexType>
 									</xs:element>
-									<xs:element name="InitialColorTolerance" minOccurs="0">
+									<xs:element name="InitialColorTolerance" type="ColorTolerance" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>Initial color tolerance in step McAdam ellipses (SDCM)</xs:documentation>
 										</xs:annotation>
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="1 SDCM"/>
-												<xs:enumeration value="2 SDCM"/>
-												<xs:enumeration value="3 SDCM"/>
-												<xs:enumeration value="4 SDCM"/>
-												<xs:enumeration value="5 SDCM"/>
-												<xs:enumeration value="6 SDCM"/>
-												<xs:enumeration value="7 SDCM"/>
-											</xs:restriction>
-										</xs:simpleType>
 									</xs:element>
-									<xs:element name="MaintainedColorTolerance" minOccurs="0">
+									<xs:element name="MaintainedColorTolerance" type="ColorTolerance" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>Maintained color tolerance after 6000h in step McAdam ellipses (SDCM)</xs:documentation>
 										</xs:annotation>
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="1 SDCM"/>
-												<xs:enumeration value="2 SDCM"/>
-												<xs:enumeration value="3 SDCM"/>
-												<xs:enumeration value="4 SDCM"/>
-												<xs:enumeration value="5 SDCM"/>
-												<xs:enumeration value="6 SDCM"/>
-												<xs:enumeration value="7 SDCM"/>
-											</xs:restriction>
-										</xs:simpleType>
 									</xs:element>
 									<xs:choice minOccurs="0">
 										<xs:element name="RatedChromaticityCoordinateValues">
@@ -1770,37 +1748,15 @@ Note: These types are used in IES photometry files</xs:documentation>
 											</xs:sequence>
 										</xs:complexType>
 									</xs:element>
-									<xs:element name="InitialColorTolerance" minOccurs="0">
+									<xs:element name="InitialColorTolerance" type="ColorTolerance" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>Initial color tolerance in step McAdam ellipses (SDCM)</xs:documentation>
 										</xs:annotation>
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="1 SDCM"/>
-												<xs:enumeration value="2 SDCM"/>
-												<xs:enumeration value="3 SDCM"/>
-												<xs:enumeration value="4 SDCM"/>
-												<xs:enumeration value="5 SDCM"/>
-												<xs:enumeration value="6 SDCM"/>
-												<xs:enumeration value="7 SDCM"/>
-											</xs:restriction>
-										</xs:simpleType>
 									</xs:element>
-									<xs:element name="MaintainedColorTolerance" minOccurs="0">
+									<xs:element name="MaintainedColorTolerance" type="ColorTolerance" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>Maintained color tolerance after 6000h in step McAdam ellipses (SDCM)</xs:documentation>
 										</xs:annotation>
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="1 SDCM"/>
-												<xs:enumeration value="2 SDCM"/>
-												<xs:enumeration value="3 SDCM"/>
-												<xs:enumeration value="4 SDCM"/>
-												<xs:enumeration value="5 SDCM"/>
-												<xs:enumeration value="6 SDCM"/>
-												<xs:enumeration value="7 SDCM"/>
-											</xs:restriction>
-										</xs:simpleType>
 									</xs:element>
 									<xs:choice minOccurs="0">
 										<xs:element name="RatedChromaticityCoordinateValues">
@@ -2271,37 +2227,15 @@ Note: These types are used in IES photometry files</xs:documentation>
 											</xs:sequence>
 										</xs:complexType>
 									</xs:element>
-									<xs:element name="InitialColorTolerance" minOccurs="0">
+									<xs:element name="InitialColorTolerance" type="ColorTolerance" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>Initial color tolerance in step McAdam ellipses (SDCM)</xs:documentation>
 										</xs:annotation>
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="1 SDCM"/>
-												<xs:enumeration value="2 SDCM"/>
-												<xs:enumeration value="3 SDCM"/>
-												<xs:enumeration value="4 SDCM"/>
-												<xs:enumeration value="5 SDCM"/>
-												<xs:enumeration value="6 SDCM"/>
-												<xs:enumeration value="7 SDCM"/>
-											</xs:restriction>
-										</xs:simpleType>
 									</xs:element>
-									<xs:element name="MaintainedColorTolerance" minOccurs="0">
+									<xs:element name="MaintainedColorTolerance" type="ColorTolerance" minOccurs="0">
 										<xs:annotation>
 											<xs:documentation>Maintained color tolerance after 6000h in step McAdam ellipses (SDCM)</xs:documentation>
 										</xs:annotation>
-										<xs:simpleType>
-											<xs:restriction base="xs:string">
-												<xs:enumeration value="1 SDCM"/>
-												<xs:enumeration value="2 SDCM"/>
-												<xs:enumeration value="3 SDCM"/>
-												<xs:enumeration value="4 SDCM"/>
-												<xs:enumeration value="5 SDCM"/>
-												<xs:enumeration value="6 SDCM"/>
-												<xs:enumeration value="7 SDCM"/>
-											</xs:restriction>
-										</xs:simpleType>
 									</xs:element>
 									<xs:choice minOccurs="0">
 										<xs:element name="RatedChromaticityCoordinateValues">
@@ -2481,6 +2415,16 @@ Note: These types are used in IES photometry files</xs:documentation>
 														</xs:restriction>
 													</xs:simpleType>
 												</xs:element>
+												<xs:element name="RatedInputPower" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>Input power consumed by the channel, when the channel is operated at its rated maximum level (Unit: watt). The sum of all channel powers may differ from the RatedInputPower of the MultiChannelLightSource, e.g. due to driver losses or limits on channel combinations</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="xs:double">
+															<xs:minInclusive value="0"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
 												<xs:element name="ColorInformation" minOccurs="0">
 													<xs:annotation>
 														<xs:documentation>Color appearance of the channel</xs:documentation>
@@ -2579,37 +2523,15 @@ Note: These types are used in IES photometry files</xs:documentation>
 																	</xs:sequence>
 																</xs:complexType>
 															</xs:element>
-															<xs:element name="InitialColorTolerance" minOccurs="0">
+															<xs:element name="InitialColorTolerance" type="ColorTolerance" minOccurs="0">
 																<xs:annotation>
 																	<xs:documentation>Initial color tolerance in step McAdam ellipses (SDCM)</xs:documentation>
 																</xs:annotation>
-																<xs:simpleType>
-																	<xs:restriction base="xs:string">
-																		<xs:enumeration value="1 SDCM"/>
-																		<xs:enumeration value="2 SDCM"/>
-																		<xs:enumeration value="3 SDCM"/>
-																		<xs:enumeration value="4 SDCM"/>
-																		<xs:enumeration value="5 SDCM"/>
-																		<xs:enumeration value="6 SDCM"/>
-																		<xs:enumeration value="7 SDCM"/>
-																	</xs:restriction>
-																</xs:simpleType>
 															</xs:element>
-															<xs:element name="MaintainedColorTolerance" minOccurs="0">
+															<xs:element name="MaintainedColorTolerance" type="ColorTolerance" minOccurs="0">
 																<xs:annotation>
 																	<xs:documentation>Maintained color tolerance after 6000h in step McAdam ellipses (SDCM)</xs:documentation>
 																</xs:annotation>
-																<xs:simpleType>
-																	<xs:restriction base="xs:string">
-																		<xs:enumeration value="1 SDCM"/>
-																		<xs:enumeration value="2 SDCM"/>
-																		<xs:enumeration value="3 SDCM"/>
-																		<xs:enumeration value="4 SDCM"/>
-																		<xs:enumeration value="5 SDCM"/>
-																		<xs:enumeration value="6 SDCM"/>
-																		<xs:enumeration value="7 SDCM"/>
-																	</xs:restriction>
-																</xs:simpleType>
 															</xs:element>
 															<xs:choice minOccurs="0">
 																<xs:element name="RatedChromaticityCoordinateValues">
@@ -2925,7 +2847,7 @@ Note: These types are used in IES photometry files</xs:documentation>
 							</xs:annotation>
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="Interface" maxOccurs="12">
+									<xs:element name="Interface" maxOccurs="unbounded">
 										<xs:annotation>
 											<xs:documentation>Determines which communication or control interface is supported by the luminaire or sensing device</xs:documentation>
 										</xs:annotation>
@@ -2943,6 +2865,36 @@ Note: These types are used in IES photometry files</xs:documentation>
 												<xs:enumeration value="Inter-Connection"/>
 												<xs:enumeration value="DMX"/>
 												<xs:enumeration value="DMX/RDM"/>
+												<xs:enumeration value="Zigbee">
+													<xs:annotation>
+														<xs:documentation>Zigbee 3.0 mesh networking standard (IEEE 802.15.4 + Zigbee Cluster Library). Maintained by the Connectivity Standards Alliance.</xs:documentation>
+													</xs:annotation>
+												</xs:enumeration>
+												<xs:enumeration value="Matter">
+													<xs:annotation>
+														<xs:documentation>Matter cross-vendor IP-based smart-home control standard. Maintained by the Connectivity Standards Alliance.</xs:documentation>
+													</xs:annotation>
+												</xs:enumeration>
+												<xs:enumeration value="Thread">
+													<xs:annotation>
+														<xs:documentation>Thread IPv6-based mesh networking transport (IEEE 802.15.4). Maintained by the Thread Group; commonly used as a transport for Matter.</xs:documentation>
+													</xs:annotation>
+												</xs:enumeration>
+												<xs:enumeration value="Bluetooth Mesh">
+													<xs:annotation>
+														<xs:documentation>Bluetooth SIG Mesh Profile - many-to-many provisioned mesh network with standardized lighting models. Distinct from point-to-point Bluetooth.</xs:documentation>
+													</xs:annotation>
+												</xs:enumeration>
+												<xs:enumeration value="DALI-2">
+													<xs:annotation>
+														<xs:documentation>DALI Version 2 (IEC 62386 Edition 2). Bidirectional digital lighting bus with extended addressing and control device support. DiiA-certified.</xs:documentation>
+													</xs:annotation>
+												</xs:enumeration>
+												<xs:enumeration value="DALI D4i">
+													<xs:annotation>
+														<xs:documentation>DALI Data and intra-luminaire bus extension (DiiA D4i specification). Adds standardized luminaire data exchange and outdoor lighting features on top of DALI-2.</xs:documentation>
+													</xs:annotation>
+												</xs:enumeration>
 											</xs:restriction>
 										</xs:simpleType>
 									</xs:element>
@@ -5986,6 +5938,14 @@ Recommend fixed time values are 35k, 50k, 75k or 100k hours (depending on applic
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:pattern value="(\d{8}|\d{12}|\d{13}|\d{14})"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ColorTolerance">
+		<xs:annotation>
+			<xs:documentation>Color tolerance in MacAdam ellipse steps (SDCM). Lexical format: a decimal number with up to two fraction digits, followed by " SDCM". Examples: "3 SDCM", "1.5 SDCM", "1.47 SDCM". Manufacturers typically specify whole or half steps between 1 and 7</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9](\.[0-9]{1,2})? SDCM"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
